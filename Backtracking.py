@@ -2,6 +2,13 @@ import Node
 import queue
 
 class Backtracking:
+    """
+    numVertices = number of vertices in the graph
+    numColor = size of color domain
+    graph = adjacency matrix representation of a graph structure
+    state = saved state for access to print after conclusion
+    cost = cost value calculated as the number of backtracks that are required
+    """
     def __init__(self, numColor, graph):
         self.numVertices = len(graph)
         self.numColor = numColor
@@ -10,6 +17,10 @@ class Backtracking:
         self.cost = 0
 
     def resetValues(self):
+        """
+        Resets the reporting values for each experiment
+        :return:
+        """
         self.state = []
         self.cost = 0
 
@@ -17,6 +28,10 @@ class Backtracking:
         return self.cost
 
     def getFinalState(self):
+        """
+        Converts final state to color words and returns the list of the state
+        :return: Returns the final state in color terms
+        """
         for v in range(len(self.state)):
             if self.state[v] == 0:
                 self.state[v] = "Red"
@@ -29,6 +44,11 @@ class Backtracking:
         return self.state
 
     def standardBacktracking(self, state=[]):
+        """
+        Standard Backtracking that will backtrack when a state fails the constraint
+        :param state: Current state where the state are the vertices that have been assigned
+        :return: Boolean if there is a solution
+        """
         if len(state) == len(self.graph):
             return True
 
@@ -43,6 +63,12 @@ class Backtracking:
         return False
 
     def checkDomain(self, neighbor, state):
+        """
+        Determines the size of the domain of the neighbor based on an input state
+        :param neighbor: Vertex to check the domain
+        :param state: Input state
+        :return: Size of the domain of neighbor
+        """
         domain = set(range(self.numColor))
         assigned = set()
         for i, x in enumerate(self.graph[neighbor]):
@@ -52,6 +78,11 @@ class Backtracking:
         return len(domain - assigned)
 
     def forwardChecking(self, state=[]):
+        """
+        Backtracking with forward checking established
+        :param state: Current assigned colors for the vertices
+        :return: Returns true if the state is a valid solution
+        """
         if len(state) == len(self.graph):
             return True
 
@@ -76,6 +107,12 @@ class Backtracking:
         return False
 
     def domainCheck(self, a, y):
+        """
+        Checks if there exists a value in domain y that does not contradict assigned state a
+        :param a: An assigned value for some vertex
+        :param y: Input domain to determine contradictions
+        :return: True if y has a b that is not a contradiction to a
+        """
         passed = False
         for b in list(y):
             if b != a:
@@ -83,15 +120,25 @@ class Backtracking:
         return passed
 
     def revise(self, q):
+        """
+        Determines if for a given tuple q, if values in domX have to be removed to make domY valid
+        :param q: Tuple (x, y, domX, domY) where x is a vertex x, y is a vertex y, domX is the domain of x, domY is the domain of y
+        :return: Returns an edited tuple q
+        """
         (x,y,domX,domY) = q
         newdomX = domX.copy()
         for a in list(domX):
             if not self.domainCheck(a, domY):
                 newdomX.remove(a)
 
-        return (x,y,domX,domY)
+        return (x,y,newdomX,domY)
 
     def arcConsistancy(self, dl = 0):
+        """
+        Arc consistancy revises possible domains for each vertex
+        :param dl: domain list where dl is a dictionary of possible domains for each vertex
+        :return: the revised domain list for each vertex
+        """
         q = queue.Queue()
         domainList = {}
         if dl == 0:
@@ -120,11 +167,19 @@ class Backtracking:
                 domainList[temp[0]] = temp[2]
 
         return domainList
+
     def backtrackAC(self, domainList, index,  state=[]):
+        """
+        Integration of backtrack algorithm with arc consistancy
+        :param domainList: Dictionary of possible domains for each vertex
+        :param index: The current vertex being looked at
+        :param state: The state of assigned vertices
+        :return: Returns true if a possible solution exists
+        """
         if len(state) == len(self.graph):
             return True
         for i in domainList[index]:
-            print(domainList)
+            #print(domainList)
             state.append(i)
             if self.checkValid(state):
                 newDomainList = domainList.copy()
@@ -139,6 +194,12 @@ class Backtracking:
         return False
 
     def checkValid(self, state):
+        """
+        Checks the validity of a given state
+
+        :param state: Input state to determine if it is valid
+        :return: Returns a boolean value for the validity of the state
+        """
         lastVertex = len(state) - 1
         for i, x in enumerate(self.graph[lastVertex]):
             if i < lastVertex:

@@ -2,6 +2,11 @@ import Backtracking
 import random
 
 def random_adjacency_matrix(n):
+    """
+    Randomly generates a graph with the only constraint of no loops and non directional represented as an adjacency matrix
+    :param n: The size of the adjacency matrix
+    :return: Returns a graph adjacency matrix
+    """
     matrix = [[random.randint(0,1) for i in range(n)] for j in range(n)]
 
     # No vertex connects to itself
