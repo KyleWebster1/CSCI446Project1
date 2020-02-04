@@ -1,4 +1,5 @@
 import Backtracking
+import SimulatedAnnealing
 import random
 
 def random_adjacency_matrix(n):
@@ -20,7 +21,7 @@ def random_adjacency_matrix(n):
 
     return matrix
 
-testingGraph = random_adjacency_matrix(10)
+testingGraph = random_adjacency_matrix(5)
 
 # testingGraph = [[0,1,1,0,0],
 #                 [1,0,1,1,0],
@@ -34,18 +35,21 @@ backtrack = Backtracking.Backtracking(numColor, testingGraph)
 for i in testingGraph:
     print(i)
 
-if backtrack.standardBacktracking():
-    print("Standard Backtracking:\n" + str(backtrack.getFinalState()), "\nCost:", backtrack.getCost())
-else:
-    print("Failed. Cost:", backtrack.getCost())
-backtrack.resetValues()
-if backtrack.forwardChecking():
-    print("Forward Backtracking:\n" + str(backtrack.getFinalState()), "\nCost:", backtrack.getCost())
-else:
-    print("Failed. Cost:", backtrack.getCost())
-backtrack.resetValues()
-dl = backtrack.arcConsistancy()
-if backtrack.backtrackAC(dl, 0):
-    print("Arc Consistency Backtracking:\n" + str(backtrack.getFinalState()), "\nCost:", backtrack.getCost())
-else:
-    print("Failed. Cost:", backtrack.getCost())
+# if backtrack.standardBacktracking():
+#     print("Standard Backtracking:\n" + str(backtrack.getFinalState()), "\nCost:", backtrack.getCost())
+# else:
+#     print("Failed. Cost:", backtrack.getCost())
+# backtrack.resetValues()
+# if backtrack.forwardChecking():
+#     print("Forward Backtracking:\n" + str(backtrack.getFinalState()), "\nCost:", backtrack.getCost())
+# else:
+#     print("Failed. Cost:", backtrack.getCost())
+# backtrack.resetValues()
+# dl = backtrack.arcConsistancy()
+# if backtrack.backtrackAC(dl, 0):
+#     print("Arc Consistency Backtracking:\n" + str(backtrack.getFinalState()), "\nCost:", backtrack.getCost())
+# else:
+#     print("Failed. Cost:", backtrack.getCost())
+
+SA = SimulatedAnnealing.SimulatedAnnealing(numColor, testingGraph)
+print(SA.sa())
