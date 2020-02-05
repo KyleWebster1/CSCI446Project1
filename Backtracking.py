@@ -96,7 +96,6 @@ class Backtracking:
                 for k in neighbors:
                     domainSize = self.checkDomain(k, state)
                     if domainSize == 0:
-                        self.cost += 1
                         anyFailed = True
                 if not anyFailed:
                     if self.forwardChecking(state):
